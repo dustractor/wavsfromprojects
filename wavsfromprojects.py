@@ -7,7 +7,6 @@ projects = home / "Documents" / "Image-Line" / "FL Studio" / "Projects"
 outputfile = here / "output.html"
 _file = lambda _:"file:///{}".format(str(_))
 
-#{{{1 minidom setup
 def _elem_inplace_addition(self,other):
     self.appendChild(other)
     return self
@@ -19,16 +18,10 @@ def _elem_set_attributes_from_tuple(self,*args):
     for k,v in args:
         self.setAttribute(k,str(v))
     return self
-def _elem_cdata_section(self,data):
-    cdata = self.ownerDocument.createCDATASection(data)
-    self.appendChild(cdata)
-    return self
 minidom.Element.__iadd__ = _elem_inplace_addition
 minidom.Element.txt = _elem_textnode
 minidom.Element.attrt = _elem_set_attributes_from_tuple
-minidom.Element.cdata = _elem_cdata_section
 minidom.Element.__str__ = lambda s:s.toprettyxml().strip()
-#}}}1
 
 doc = minidom.Document()
 elem = doc.createElement
