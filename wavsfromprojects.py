@@ -1,5 +1,6 @@
 import pathlib
 from xml.dom import minidom
+from hashlib import md5
 
 home = pathlib.Path.home()
 here = pathlib.Path(__file__).parent
@@ -76,6 +77,12 @@ for path in projects.iterdir():
         for f in flps:
             li = elem("li")
             flp_ul += li
+            cbox = elem("input")
+            li += cbox
+            cbox.attrt(
+                ("type","checkbox"),
+                ("value",md5(str(f).encode("utf-8")).hexdigest()),
+                ("onclick","checkChange(this)"))
             a = elem("a")
             li += a
             a.attrt(("href",_file(f)))
@@ -83,6 +90,12 @@ for path in projects.iterdir():
         for f in wavs:
             li = elem("li")
             wav_ul += li
+            cbox = elem("input")
+            li += cbox
+            cbox.attrt(
+                ("type","checkbox"),
+                ("value",md5(str(f).encode("utf-8")).hexdigest()),
+                ("onclick","checkChange(this)"))
             a = elem("a")
             li += a
             a.attrt(("href",_file(f)))
@@ -91,14 +104,14 @@ textarea = elem("textarea")
 body += textarea
 textarea.attrt(("id","myTextarea"),("rows",4),("cols",40))
 textarea.txt("")
-savebutton = elem("button")
-body += savebutton
-savebutton.attrt(("onclick","mySave()"))
-savebutton.txt("save")
-loadbutton = elem("button")
-body += loadbutton
-loadbutton.attrt(("onclick","myLoad()"))
-loadbutton.txt("load")
+# savebutton = elem("button")
+# body += savebutton
+# savebutton.attrt(("onclick","mySave()"))
+# savebutton.txt("save")
+# loadbutton = elem("button")
+# body += loadbutton
+# loadbutton.attrt(("onclick","myLoad()"))
+# loadbutton.txt("load")
 
 script = elem("script")
 body += script
@@ -114,10 +127,30 @@ function mySave() {
 function myLoad() {
     var myContent = localStorage.getItem("myContent");
     document.getElementById("myTextarea").value = myContent;
+    var checkboxes = document.getElementsByTagName("input");
+    console.log(checkboxes);
+    for (var x in checkboxes){
+        var stored = localStorage.getItem(checkboxes[x].value);
+        if (stored == "x") {
+            checkboxes[x].checked = true;
+        }
+    }
     console.log("loaded");
     }
+
+function checkChange(cbox){
+    console.log(cbox.value,cbox.checked);
+    if (cbox.checked == true){
+        localStorage.setItem(cbox.value,"x");
+    } else {
+        localStorage.removeItem(cbox.value);
+    }
+}
 """
 css = """
+body {
+    margin-top:5em;
+}
 #myTextarea{
     position:fixed;
     top:0;
