@@ -14,3 +14,6 @@ This will scan your projects folder for wav files one level deep and create a we
 3. Insert the following code in the mimetypes section:  
 
 ``,"application/flp":{"action":4,"extensions":["flp"]}``
+
+
+here is video https://youtu.be/XZMKMAuiHCI
