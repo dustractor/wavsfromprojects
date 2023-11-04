@@ -104,20 +104,38 @@ textarea = elem("textarea")
 body += textarea
 textarea.attrt(("id","myTextarea"),("rows",4),("cols",40))
 textarea.txt("")
-# savebutton = elem("button")
-# body += savebutton
-# savebutton.attrt(("onclick","mySave()"))
-# savebutton.txt("save")
-# loadbutton = elem("button")
-# body += loadbutton
-# loadbutton.attrt(("onclick","myLoad()"))
-# loadbutton.txt("load")
+
+action1button = elem("button")
+body += action1button
+action1button.attrt(("onclick","listChecked()"))
+action1button.txt("List Checked")
 
 script = elem("script")
 body += script
 script.txt("{js}")
 
 js = """
+function listChecked(){
+    var hr = document.createElement("hr");
+    document.body.appendChild(hr);
+    const file_re = /file:\/\/\//;
+    const space_re = /%20/g;
+    var chx = document.getElementsByTagName("input");
+    var chkd = Array();
+    for (var x in chx){
+        if (chx[x].checked == true){
+            var h = chx[x].nextElementSibling.href;
+            chkd.push(h.replace(file_re,"").replace(space_re," "));
+        }
+    }
+    for (var x in chkd){
+        var p = document.createElement("p");
+        document.body.appendChild(p);
+        p.textContent = chkd[x].toString();
+    }
+    window.scrollTo(0, document.body.scrollHeight);
+}
+
 function mySave() {
     var myContent = document.getElementById("myTextarea").value;
     localStorage.setItem("myContent", myContent);
